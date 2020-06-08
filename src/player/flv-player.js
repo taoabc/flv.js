@@ -29,7 +29,11 @@ import {createDefaultConfig} from '../config.js';
 import {InvalidArgumentException, IllegalStateException} from '../utils/exception.js';
 
 class FlvPlayer {
-
+    /**
+     * 该函数仅做一些常规的初始化动作
+     * @param {*} mediaDataSource 传输过来{ type: 'flv', url: 'http://xxx.flv' }
+     * @param {*} config
+     */
     constructor(mediaDataSource, config) {
         this.TAG = 'FlvPlayer';
         this._type = 'FlvPlayer';
@@ -184,6 +188,9 @@ class FlvPlayer {
         }
     }
 
+    /**
+     * 加载数据
+     */
     load() {
         if (!this._mediaElement) {
             throw new IllegalStateException('HTMLMediaElement must be attached before load()!');
@@ -206,6 +213,7 @@ class FlvPlayer {
             this._mediaElement.currentTime = 0;
         }
 
+        // 关键类：Transmuxer, 从 ../core/transmuxer.js 导出
         this._transmuxer = new Transmuxer(this._mediaDataSource, this._config);
 
         this._transmuxer.on(TransmuxingEvents.INIT_SEGMENT, (type, is) => {
@@ -258,7 +266,7 @@ class FlvPlayer {
                 this._mediaElement.currentTime = milliseconds / 1000;
             }
         });
-
+        // 1. new, 2. 挂消息监听，3. open
         this._transmuxer.open();
     }
 
@@ -277,6 +285,7 @@ class FlvPlayer {
     }
 
     play() {
+        // 通过video DOM自带的play，来实现play
         return this._mediaElement.play();
     }
 

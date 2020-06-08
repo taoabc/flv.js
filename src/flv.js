@@ -45,6 +45,7 @@ function createPlayer(mediaDataSource, optionalConfig) {
 
     switch (mds.type) {
         case 'flv':
+            // 判断是FLV格式，从这里进去
             return new FlvPlayer(mds, optionalConfig);
         default:
             return new NativePlayer(mds, optionalConfig);
